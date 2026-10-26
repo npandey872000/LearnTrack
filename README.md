@@ -1,32 +1,34 @@
 # LearnTrack
 
-LearnTrack is a Core Java console application for maintaining student records, courses, and course enrollments. It uses in-memory repositories, so data lasts only for the current run.
+LearnTrack is a Core Java console application for managing students, courses, and enrollments. Records are stored in memory and reset when the application exits.
 
 ## Requirements
 
-- Java Development Kit (JDK) 8 or newer
+- JDK 8 or newer
 
-## Run
+## Compile and run
 
-From the repository root, compile the source files and run the application:
+From the repository root:
 
 ```sh
 mkdir -p out
-javac -d out $(find src -name '*.java')
+javac -d out src/com/airtribe/learntrack/Main.java
 java -cp out com.airtribe.learntrack.Main
 ```
 
-On Windows PowerShell, compile with `javac -d out (Get-ChildItem -Recurse src -Filter *.java | ForEach-Object FullName)` and run with `java -cp out com.airtribe.learntrack.Main`.
+On Windows, create the output folder with `New-Item -ItemType Directory -Force out` and use the same `javac` and `java` commands.
 
 ## Features
 
-- Add and list students.
-- Add and list courses, including capacity.
-- Enroll a student in a course, while preventing duplicate enrollments and full courses.
-- List enrollments and withdraw a student.
-- Validate entered values and report missing records with clear errors.
+- Add and list students with validated names and email addresses.
+- Add and list courses with a capacity.
+- Enroll students, block duplicate enrollments, and enforce course capacity.
+- List enrollments and withdraw an enrollment.
+- Display helpful messages for invalid input and unknown IDs.
 
 ## Class diagram
+
+The application keeps its related model, repository, and service classes as static nested classes in `Main.java`.
 
 ```mermaid
 classDiagram
@@ -40,6 +42,7 @@ classDiagram
         -String studentNumber
     }
     class Course {
+        -int id
         -String title
         -int capacity
         -CourseStatus status
@@ -73,16 +76,7 @@ classDiagram
 ## Project layout
 
 ```text
-src/com/airtribe/learntrack/
-├── Main.java
-├── entity/       Person, Student, Course, Enrollment
-├── repository/   In-memory repositories
-├── service/      Application rules
-├── exception/    Domain exceptions
-├── util/         ID generation and input validation
-└── enums/        Course and enrollment states
+src/com/airtribe/learntrack/Main.java
 ```
 
-## Notes
-
-This project is a simple learning example. Replace the in-memory repositories with persistent storage if records need to survive between runs.
+The project uses in-memory storage to keep the example dependency-free and easy to run. Data is not saved between runs.
